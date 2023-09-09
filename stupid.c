@@ -7,28 +7,27 @@
 #include <linux/errno.h>
 
 #define FIRST_MINOR 0
-#define MINOR_DEV_COUNT 1
-#define DEV_NAME "stupid_dev"
-static dev_t stupid_dev;
-
+#define MINOR_DEV_COUNT 4
+#define DEV_NAME "stupid"
+static dev_t stupid;
 
 static int __init stupid_init(void)
 {
-  int r = alloc_chrdev_region(&stupid_dev, FIRST_MINOR,
+  int r = alloc_chrdev_region(&stupid, FIRST_MINOR,
       MINOR_DEV_COUNT, DEV_NAME);
   if(r) {
     pr_err("stupid device hasn't been alloced!\n");
-    return -ENOMEM;
+    return -ENODEV;
   }
   
   pr_info("the major: %d\nthe minor: %d\n",
-      MAJOR(stupid_dev), MINOR(stupid_dev));
+      MAJOR(stupid), MINOR(stupid));
   return 0;
 }
 
 static void __exit stupid_exit(void)
 {
-  unregister_chrdev_region(stupid_dev, MINOR_DEV_COUNT);
+  unregister_chrdev_region(stupid, MINOR_DEV_COUNT);
   pr_info("stupid is exited\n");
 }
 

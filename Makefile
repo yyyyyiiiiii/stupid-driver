@@ -1,4 +1,4 @@
-obj-m += stupid-driver.o
+obj-m += stupid.o
 
 PWD := $(CURDIR)
 
