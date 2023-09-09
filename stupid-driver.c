@@ -4,6 +4,7 @@
 #include <linux/types.h>
 #include <linux/kdev_t.h>
 #include <linux/fs.h>
+#include <linux/errno.h>
 
 #define FIRST_MINOR 0
 #define MINOR_DEV_COUNT 1
@@ -17,7 +18,7 @@ static int __init stupid_init(void)
       MINOR_DEV_COUNT, DEV_NAME);
   if(r) {
     pr_err("stupid device hasn't been alloced!\n");
-    return 1;
+    return -ENOMEM;
   }
   
   pr_info("the major: %d\nthe minor: %d\n",
