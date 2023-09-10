@@ -11,7 +11,7 @@
 #define MINOR_DEV_COUNT 4
 #define DEV_NAME "stupid"
 static dev_t stupid;
-static struct cdev stupid_cdev;
+static struct cdev *stupid_cdev;
 
 static int dev_open(struct inode *inode, struct file *file)
 {
@@ -56,14 +56,15 @@ static int __init stupid_init(void)
   pr_info("the major: %d\nthe minor: %d\n",
       MAJOR(stupid), MINOR(stupid));
 
-  cdev_init(&stupid_cdev, &stupid_fops);
-  cdev_add(&stupid_cdev, stupid, MINOR_DEV_COUNT);
+  stupid_cdev = cdev_alloc();
+  cdev_init(stupid_cdev, &stupid_fops);
+  cdev_add(stupid_cdev, stupid, MINOR_DEV_COUNT);
   return 0;
 }
 
 static void __exit stupid_exit(void)
 {
-  cdev_del(&stupid_cdev);
+  cdev_del(stupid_cdev);
   unregister_chrdev_region(stupid, MINOR_DEV_COUNT);
   pr_info("stupid is exited\n");
 }
